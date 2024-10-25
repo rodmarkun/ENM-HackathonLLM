@@ -1,42 +1,52 @@
+"use client"
+
 import { Ticket } from "@/types";
+import { useRouter } from 'next/navigation'
+
 
 type TicketProps = {
-  data: Ticket;
+  ticket: Ticket;
 };
 
-export default function TicketCard({ data }: TicketProps) {
+export default function TicketCard({ ticket }: TicketProps) {
+  const router = useRouter()
+  // Handler for when a ticket card is clicked
+  const handleClick = (id: number) => {
+    router.push('/template')
+    console.log('Click on ticket with ID:', id);
+  };
+
   return (
-    <div className="grid grid-cols-3 gap-4 p-4 bg-foreground text-text rounded-md shadow-md">
-      <div className="col-span-1 flex flex-col space-y-2">
-        <p className="text-lg font-bold">{data.subject}</p>
-        <p className="">By: {data.name}</p>
-      </div>
-
-      <div className="col-span-1 flex flex-col space-y-2">
-        <p className="">{data.description}</p>
-        <p className="text-sm ">Category: {data.category}</p>
-      </div>
-
-      <div className="col-span-1 flex flex-col space-y-2 items-start">
-        <p
-          className={`px-2 py-1 text-sm rounded ${
-            data.status === "in_progress"
+    <tr
+      key={ticket.id}
+      onClick={() => handleClick(ticket.id)}
+      className="border-b border-gray-200 hover:opacity-70 hover:cursor-pointer"
+    >
+      <td className="py-3 px-6 text-left font-medium">
+        {ticket.subject}
+      </td>
+      <td className="py-3 px-6 text-left">{ticket.name}</td>
+      <td className="py-3 px-6 text-left">{ticket.description}</td>
+      <td className="py-3 px-6 text-left">{ticket.category}</td>
+      <td className="py-3 px-6 text-left">
+        <span
+          className={`px-2 py-1 rounded ${
+            ticket.status === "in_progress"
               ? "bg-yellow-200 text-yellow-800"
-              : data.status === "open"
+              : ticket.status === "open"
               ? "bg-green-200 text-green-800"
               : "bg-red-200 text-red-800"
           }`}
         >
-          {data.status.replace("_", " ")}
-        </p>
-        <p className="text-sm text-gray-500">
-          Sentiment:{" "}
-          {data.sentiment.charAt(0).toUpperCase() + data.sentiment.slice(1)}
-        </p>
-        <p className="text-sm text-gray-500">
-          Created: {new Date(data.created_at).toLocaleString()}
-        </p>
-      </div>
-    </div>
+          {ticket.status.replace("_", " ")}
+        </span>
+      </td>
+      <td className="py-3 px-6 text-left">
+        {ticket.sentiment.charAt(0).toUpperCase() + ticket.sentiment.slice(1)}
+      </td>
+      <td className="py-3 px-6 text-left">
+        {new Date(ticket.created_at).toLocaleString()}
+      </td>
+    </tr>
   );
 }
