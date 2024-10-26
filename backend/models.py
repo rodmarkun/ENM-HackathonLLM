@@ -1,5 +1,8 @@
 import requests
 import constants
+import ticket_cluster
+
+cluster_manager = ticket_cluster.initialize_clustering()
 
 def query_sentiment(ticket_payload):
     description = ticket_payload.get("description", None)
@@ -24,8 +27,22 @@ def query_language(ticket_payload):
         return None, None
     
 def query_mistral(ticket_payload, context = None, strategy = 'autoAnswer'):
+    previous_solutions = cluster_manager.process_ticket(ticket_payload.to_dict())
+    
+    # Build context string with similar tickets if available
     context_str = f"COMPANY CONTEXT: {context} " if context else ""
-    prompt = f"{context_str}TICKET DESCRIPTION: {ticket_payload['description']} GENERATE A {'TEMPLATED' if strategy == 'template' else 'AUTOMATED'} RESPONSE NOW:"
+    if previous_solutions['similar_tickets']:
+        context_str += "\nSIMILAR CASES:\n"
+        for i, ticket in enumerate(previous_solutions['similar_tickets'], 1):
+            context_str += f"""
+Case {i}:
+Problem: {ticket['description']}
+Solution: {ticket['answer']}
+---"""
+    
+    # Build the final prompt
+    prompt = f"{context_str}\nTICKET DESCRIPTION: {ticket_payload['description']}\nGENERATE A {'TEMPLATED' if strategy == 'template' else 'AUTOMATED'} RESPONSE NOW:"
+    print("FINAL PROMPT: ", prompt)
     payload, headers = generate_mistral_payload(prompt, constants.MISTRAL_TEMPLATE_AGENT_ID)
     try:
         response = requests.post(constants.MISTRAL_API_ENDPOINT, headers=headers, json=payload)

@@ -101,7 +101,7 @@ async def generate_answer_ticket(ticket: dict):
     try:
         context = s3.get_context()
         ticket['status'] = 'inProgress'
-        Ticket.create_or_update_from_json(ticket)
+        Ticket.create_or_update_from_json(ticket, ticket['id'])
         if ticket.get('strategy') == 'template':
             answer, code = models.query_mistral(ticket, context, 'template')
             Answer.create_answer(ticket['id'], answer)
