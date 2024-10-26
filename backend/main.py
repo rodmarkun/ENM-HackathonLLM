@@ -101,6 +101,7 @@ async def generate_answer_ticket(ticket: dict):
     try:
         context = s3.get_context()
         ticket['status'] = 'inProgress'
+        print(ticket)
         Ticket.create_or_update_from_json(ticket, ticket['id'])
         if ticket.get('strategy') == 'template':
             answer, code = models.query_mistral(ticket, context, 'template')
@@ -146,10 +147,5 @@ def process_ticket(ticket_json: Dict) -> Dict:
     return ticket_json
 
 if __name__ == "__main__":
-    # Create tables if they don't exist
-    db.connect()
-    db.create_tables([Ticket], safe=True)
-    db.close()
-    
     # Run the FastAPI app
     uvicorn.run(app, host="0.0.0.0", port=8000)
