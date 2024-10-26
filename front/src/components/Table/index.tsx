@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { mockTickets } from "@/mocks";
 import type { Ticket } from "@/types";
 import TicketCard from "../Ticket";
 import { useRules } from "@/context/RulesContext";
 import { generateAnswer } from "@/services/generateAnswer";
+import { getAllTickets } from "@/services/db";
 
 interface SortConfig {
   key: keyof Ticket | null;
@@ -38,7 +38,22 @@ export default function Table({ activeView }: Props) {
     direction: "asc",
   });
 
-  const updatedTickets = mockTickets.map((ticket) => {
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+
+  // Keep track of previously processed ticket IDs
+  const processedTicketIds = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    async function fetchTickets() {
+      const _tickets = await getAllTickets();
+      console.log("Tickets: ", _tickets);
+      setTickets(_tickets);
+    }
+
+    fetchTickets();
+  }, []);
+
+  const updatedTickets = tickets.map((ticket) => {
     const matchingRule = rules.find(
       (rule) => ticket[rule.property] === rule.value
     );
@@ -72,18 +87,31 @@ export default function Table({ activeView }: Props) {
     (ticket) => ticket.strategy === "autoAnswer"
   );
 
+  // Process new autoAnswer tickets whenever rules or tickets change
   useEffect(() => {
-    async function generateAnswersForAutoAnswerTickets() {
+    async function processNewAutoAnswerTickets() {
       try {
-        await Promise.all(
-          autoAnswerStratTickets.map((ticket) => generateAnswer(ticket))
+        const newAutoAnswerTickets = autoAnswerStratTickets.filter(
+          (ticket) => !processedTicketIds.current.has(ticket.created_at)
         );
+
+        if (newAutoAnswerTickets.length > 0) {
+          await Promise.all(
+            newAutoAnswerTickets.map((ticket) => generateAnswer(ticket))
+          );
+
+          // Add newly processed tickets to the set
+          newAutoAnswerTickets.forEach((ticket) => {
+            processedTicketIds.current.add(ticket.created_at);
+          });
+        }
       } catch (error) {
         console.error("Error in generating answers for tickets:", error);
       }
     }
-    generateAnswersForAutoAnswerTickets();
-  }, []);
+
+    processNewAutoAnswerTickets();
+  }, [rules, autoAnswerStratTickets]);
 
   return (
     <div className="overflow-x-auto">
