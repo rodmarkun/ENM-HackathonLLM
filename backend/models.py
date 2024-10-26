@@ -27,7 +27,7 @@ def query_language(ticket_payload):
         return None, None
     
 def query_mistral(ticket_payload, context = None, strategy = 'autoAnswer'):
-    previous_solutions = cluster_manager.process_ticket(ticket_payload.to_dict())
+    previous_solutions = cluster_manager.process_ticket(ticket_payload)
     
     # Build context string with similar tickets if available
     context_str = f"COMPANY CONTEXT: {context} " if context else ""

@@ -15,7 +15,7 @@ def test_answer_ticket(base_url: str = "http://localhost:8000") -> None:
     # Test cases
     test_tickets = [
         {
-            "id": 999,
+            "id": 7,
             "name": "John Doe",
             "email": "john@example.com",
             "subject": "Payment Issue",
@@ -27,7 +27,7 @@ def test_answer_ticket(base_url: str = "http://localhost:8000") -> None:
             "priority": "high"
         },
         {
-            "id": 1000,
+            "id": 8,
             "name": "Jane Smith",
             "email": "jane@example.com",
             "subject": "Template Request",

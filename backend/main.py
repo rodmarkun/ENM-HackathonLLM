@@ -109,7 +109,7 @@ async def generate_answer_ticket(ticket: dict):
         else:
             answer, code = models.query_mistral(ticket, context, 'autoAnswer')
             Answer.create_answer(ticket['id'], answer)
-            print(f"Answer for ticket: {ticket[id]}: {answer}")
+            print(f"Answer for ticket: {ticket['id']}: {answer}")
 
         return {"message": "Ticket answer/template generated successfully."}
             
