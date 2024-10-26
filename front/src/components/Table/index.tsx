@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { mockTickets } from "@/mocks";
 import type { Ticket } from "@/types";
 import TicketCard from "../Ticket";
+import { useRules } from "@/context/RulesContext";
 
 interface SortConfig {
   key: keyof Ticket | null;
@@ -27,12 +28,22 @@ const headers: TableHeader[] = [
 ];
 
 export default function Table() {
+  const { rules } = useRules();
   const [sortConfig, setSortConfig] = useState<SortConfig>({
     key: null,
     direction: "asc",
   });
 
-  const sortedTickets = [...mockTickets].sort((a, b) => {
+  const updatedTickets = mockTickets.map((ticket) => {
+    const matchingRule = rules.find(
+      (rule) => ticket[rule.property] === rule.value
+    );
+    return matchingRule
+      ? { ...ticket, strategy: matchingRule.strategy }
+      : ticket;
+  });
+
+  const sortedTickets = [...updatedTickets].sort((a, b) => {
     if (sortConfig.key) {
       const direction = sortConfig.direction === "asc" ? 1 : -1;
       return a[sortConfig.key] > b[sortConfig.key] ? direction : -direction;
@@ -58,27 +69,10 @@ export default function Table() {
             {headers.map((header) => (
               <th
                 key={header.label}
-                className={cn(
-                  "py-3 px-6 text-left",
-                  header.sortKey && "cursor-pointer"
-                )}
+                className="py-3 px-6 text-left cursor-pointer"
                 onClick={() => header.sortKey && handleSort(header.sortKey)}
               >
-                <span className="flex items-center">
-                  {header.label}
-                  {header.sortKey && (
-                    <span
-                      className={cn(
-                        "ml-1 transition-transform duration-200",
-                        sortConfig.key === header.sortKey &&
-                          sortConfig.direction === "asc" &&
-                          "rotate-180"
-                      )}
-                    >
-                      {"\u25B2"}
-                    </span>
-                  )}
-                </span>
+                {header.label}
               </th>
             ))}
           </tr>

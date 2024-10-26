@@ -7,7 +7,9 @@ export type Ticket = {
   created_at: string;
   updated_at: string;
   language: string;
-  status: "in_progress" | "open" | "closed";
+  status: "open" | "inProgress" | "closed";
   category: "technical" | "billing" | "support";
   sentiment: "positive" | "neutral" | "negative";
+  strategy: "template" | "autoAnswer";
+  priority: "low" | "mid" | "high";
 };

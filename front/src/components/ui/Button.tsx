@@ -5,7 +5,7 @@ type Props = {
   children: ReactNode;
   onClick: () => void;
   size: "icon" | "none" | "md";
-  color: "accent";
+  color: "accent" | "none";
 };
 
 export const Button = ({ children, onClick, size, color }: Props) => {
@@ -18,6 +18,7 @@ export const Button = ({ children, onClick, size, color }: Props) => {
     },
     colors: {
       accent: "bg-accent",
+      none: "",
     },
   };
 
