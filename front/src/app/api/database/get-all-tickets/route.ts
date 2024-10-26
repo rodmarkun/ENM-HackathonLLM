@@ -7,6 +7,7 @@ export async function GET() {
       headers: {
         "Content-Type": "application/json",
       },
+      cache: "no-store",
     });
 
     if (!backendResponse.ok) {
@@ -18,7 +19,6 @@ export async function GET() {
     }
 
     const data = await backendResponse.json(); // Parse JSON from backend response
-    console.log(data, "<-SERVER TICKETS: ");
     return NextResponse.json(data);
   } catch (error) {
     console.error("Fetch error:", error);

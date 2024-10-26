@@ -26,7 +26,6 @@ export default function Table({ activeView }: Props) {
   useEffect(() => {
     async function fetchTickets() {
       const _tickets = await getAllTickets();
-      // console.log("Tickets: ", _tickets);
       setTickets(_tickets);
     }
 

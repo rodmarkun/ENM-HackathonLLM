@@ -3,6 +3,7 @@
 import Navbar from "@/components/Navbar";
 import TemplateInput from "@/components/Template/TemplateInput";
 import { mockTickets } from "@/mocks";
+import { revalidatePath } from "next/cache";
 
 type Props = {
   params: {
