@@ -18,7 +18,6 @@ export async function GET() {
     }
 
     const data = await backendResponse.json(); // Parse JSON from backend response
-    console.log(data, "<-AAA SERVER");
 
     return NextResponse.json(data);
   } catch (error) {
