@@ -1,4 +1,7 @@
+"use client"
+
 import Navbar from "@/components/Navbar";
+import TemplateInput from "@/components/Template/TemplateInput";
 import { mockTickets } from "@/mocks";
 
 type Props = {
@@ -9,11 +12,17 @@ type Props = {
 
 export default function Template({ params }: Props) {
   const idx = params.slug;
+  const ticket = mockTickets[idx - 1];
+
+  // Define a placeholder onClose function
+  const handleClose = () => {
+    console.log("Close button clicked");
+  };
 
   return (
     <div className="h-screen flex flex-col gap-4 px-4 pt-2">
       <Navbar />
-      <div>{mockTickets[idx - 1].name}</div>
+      <TemplateInput ticket={ticket} onClose={handleClose} />
     </div>
   );
 }
