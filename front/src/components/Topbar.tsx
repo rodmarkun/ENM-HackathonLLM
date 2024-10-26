@@ -4,6 +4,7 @@ import { useRules, Rule, Property } from "../context/RulesContext";
 import { useRef, useState } from "react";
 import { Button } from "./ui/Button";
 import { Modal } from "./ui/Modal";
+import { sendContextFile } from "@/services/s3";
 
 const propertyOptions: Record<Property, string[]> = {
   category: ["technical", "billing", "support"],
@@ -44,6 +45,19 @@ export default function Topbar() {
       >
         Upload Context
       </Button>
+      {/* Hidden file input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          const file = e.target.files?.[0];
+          if (!file) {
+            return;
+          }
+          sendContextFile(file);
+        }}
+      />
       <Button onClick={() => setIsModalOpen(true)} size="md" color="accent">
         Config
       </Button>
@@ -112,19 +126,6 @@ export default function Topbar() {
                 </div>
               </div>
             )}
-            {/* Hidden file input */}
-            <input
-              type="file"
-              ref={fileInputRef}
-              style={{ display: "none" }}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  // Handle the uploaded file as needed
-                  console.log("File selected:", file);
-                }
-              }}
-            />
           </div>
         </Modal>
       )}
