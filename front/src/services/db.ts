@@ -12,6 +12,6 @@ export async function getAllTickets(): Promise<Ticket[]> {
   }
 
   const tickets = await res.json(); // Parse the JSON response
-  
+  console.log("CLIENT TICKETS: ", tickets);
   return tickets; // Return tickets as an array directly
 }

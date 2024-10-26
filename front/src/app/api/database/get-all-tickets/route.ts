@@ -18,7 +18,7 @@ export async function GET() {
     }
 
     const data = await backendResponse.json(); // Parse JSON from backend response
-
+    console.log(data, "<-SERVER TICKETS: ");
     return NextResponse.json(data);
   } catch (error) {
     console.error("Fetch error:", error);

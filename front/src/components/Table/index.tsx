@@ -1,31 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import type { Ticket } from "@/types";
+import type { SortConfig, Ticket } from "@/types";
 import TicketCard from "../Ticket";
 import { useRules } from "@/context/RulesContext";
 import { generateAnswer } from "@/services/generateAnswer";
 import { getAllTickets } from "@/services/db";
-
-interface SortConfig {
-  key: keyof Ticket | null;
-  direction: "asc" | "desc";
-}
-
-interface TableHeader {
-  label: string;
-  sortKey: keyof Ticket | null;
-}
-
-const headers: TableHeader[] = [
-  { label: "Subject", sortKey: null },
-  { label: "Name", sortKey: null },
-  { label: "Description", sortKey: null },
-  { label: "Category", sortKey: null },
-  { label: "Status", sortKey: null },
-  { label: "Sentiment", sortKey: "sentiment" },
-  { label: "Created At", sortKey: "created_at" },
-  { label: "Strategy", sortKey: null },
-];
+import { headers } from "@/consts";
 
 type Props = {
   activeView: "tickets" | "answered";
@@ -46,7 +26,7 @@ export default function Table({ activeView }: Props) {
   useEffect(() => {
     async function fetchTickets() {
       const _tickets = await getAllTickets();
-      console.log("Tickets: ", _tickets);
+      // console.log("Tickets: ", _tickets);
       setTickets(_tickets);
     }
 
@@ -97,7 +77,7 @@ export default function Table({ activeView }: Props) {
 
         if (newAutoAnswerTickets.length > 0) {
           await Promise.all(
-            newAutoAnswerTickets.map((ticket) => generateAnswer(ticket))
+            newAutoAnswerTickets.map((ticket) => generateAnswer(ticket)) 
           );
 
           // Add newly processed tickets to the set
@@ -111,7 +91,7 @@ export default function Table({ activeView }: Props) {
     }
 
     processNewAutoAnswerTickets();
-  }, [rules, autoAnswerStratTickets]);
+  }, [rules]);
 
   return (
     <div className="overflow-x-auto">

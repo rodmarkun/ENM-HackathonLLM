@@ -13,3 +13,14 @@ export type Ticket = {
   strategy: "template" | "autoAnswer";
   priority: "low" | "mid" | "high";
 };
+
+export interface SortConfig {
+  key: keyof Ticket | null;
+  direction: "asc" | "desc";
+}
+
+export interface TableHeader {
+  label: string;
+  sortKey: keyof Ticket | null;
+}
+

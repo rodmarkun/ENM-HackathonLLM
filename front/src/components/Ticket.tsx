@@ -1,6 +1,11 @@
 "use client";
 
-import { cn, shortendDescription } from "@/lib/utils";
+import {
+  cn,
+  getPriorityClasses,
+  getStatusClasses,
+  shortendDescription,
+} from "@/lib/utils";
 import { Ticket } from "@/types";
 import { useRouter } from "next/navigation";
 
@@ -26,13 +31,21 @@ export default function TicketCard({ ticket }: TicketProps) {
       <td className="py-3 px-6 text-left">
         <span
           className={cn(
-            "px-2 py-1 rounded whitespace-nowrap",
-            ticket.status === "inProgress" && "bg-yellow-200 text-yellow-800",
-            ticket.status === "open" && "bg-green-200 text-green-800",
-            ticket.status === "closed" && "bg-red-200 text-red-800"
+            "px-2 py-1 rounded-md",
+            getStatusClasses(ticket.status)
           )}
         >
           {ticket.status}
+        </span>
+      </td>
+      <td className="py-3 px-6 text-left">
+        <span
+          className={cn(
+            "px-2 py-1 rounded-md",
+            getPriorityClasses(ticket.priority)
+          )}
+        >
+          {ticket.priority}
         </span>
       </td>
       <td className="py-3 px-6 text-left">
