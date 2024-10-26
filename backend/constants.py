@@ -46,7 +46,7 @@ S3_BUCKET_NAME = "hackathon-enm"
 /// API KEYS ///
 ////////////////
 """
-AWS_ACCESS_KEY = ""
-AWS_SECRET_ACCESS_KEY = ""
-MISTRAL_API_KEY = ""
-HF_HEADERS = {"Authorization": f"Bearer "}
+AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+HF_HEADERS = {"Authorization": f"Bearer {os.getenv('HF_TOKEN')}"}

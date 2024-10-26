@@ -171,6 +171,71 @@ class Ticket(BaseModel):
             'priority': self.priority
         }
     
+class Answer(BaseModel):
+    id = peewee.AutoField()
+    ticket_id = peewee.IntegerField()
+    answer = peewee.TextField()
+    created_at = peewee.DateTimeField(default=datetime.now)
+    updated_at = peewee.DateTimeField(default=datetime.now)
+    
+    @classmethod
+    def create_answer(cls, ticket_id: int, answer: str) -> 'Answer':
+        """
+        Create or update an answer for a ticket
+        
+        Args:
+            ticket_id (int): ID of the ticket
+            answer (str): Answer text
+            
+        Returns:
+            Answer: Created or updated answer instance
+        """
+        try:
+            # Check if answer exists
+            existing_answer = cls.get_or_none(cls.ticket_id == ticket_id)
+            
+            if existing_answer:
+                # Update existing answer
+                existing_answer.answer = answer
+                existing_answer.updated_at = datetime.now()
+                existing_answer.save()
+                return existing_answer
+            else:
+                # Create new answer
+                return cls.create(
+                    ticket_id=ticket_id,
+                    answer=answer,
+                    created_at=datetime.now(),
+                    updated_at=datetime.now()
+                )
+                
+        except Exception as e:
+            raise ValueError(f"Error creating/updating answer: {str(e)}")
+    
+    @classmethod
+    def get_answer(cls, ticket_id: int) -> Optional[Dict]:
+        """
+        Get answer for a specific ticket
+        
+        Args:
+            ticket_id (int): ID of the ticket
+            
+        Returns:
+            Optional[Dict]: Answer data as dictionary or None if not found
+        """
+        answer = cls.get_or_none(cls.ticket_id == ticket_id)
+        return answer.to_dict() if answer else None
+    
+    def to_dict(self) -> Dict:
+        """Convert answer instance to dictionary"""
+        return {
+            'id': self.id,
+            'ticket_id': self.ticket_id,
+            'answer': self.answer,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
+        }
+    
 
 if __name__ == '__main__':
     """Initialize the database and create tables."""
@@ -179,10 +244,10 @@ if __name__ == '__main__':
         db.connect()
         
         # Create tables
-        db.create_tables([Ticket], safe=True)
+        db.create_tables([Ticket, Answer], safe=True)
         
         print(f"Database initialized successfully.")
-        print("Created tables: tickets")
+        print("Created tables: ticket, answer")
             
     except Exception as e:
         print(f"Error initializing database: {str(e)}")

@@ -23,9 +23,9 @@ def query_language(ticket_payload):
         print("WARNING - Could not get field -description- from Ticket")
         return None, None
     
-def query_mistral_template(ticket_payload, context):
+def query_mistral(ticket_payload, context = None, strategy = 'autoAnswer'):
     context_str = f"COMPANY CONTEXT: {context} " if context else ""
-    prompt = f"{context_str}TICKET DESCRIPTION: {ticket_payload['description']} GENERATE A RESPONSE NOW:"
+    prompt = f"{context_str}TICKET DESCRIPTION: {ticket_payload['description']} GENERATE A {'TEMPLATED' if strategy == 'template' else 'AUTOMATED'} RESPONSE NOW:"
     payload, headers = generate_mistral_payload(prompt, constants.MISTRAL_TEMPLATE_AGENT_ID)
     try:
         response = requests.post(constants.MISTRAL_API_ENDPOINT, headers=headers, json=payload)

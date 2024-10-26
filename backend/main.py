@@ -9,7 +9,7 @@ import s3
 from typing import List, Dict
 
 import models
-from database import Ticket, db
+from database import Ticket, Answer, db
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -97,16 +97,32 @@ async def get_current_context():
 
 @app.post("/answer_ticket")
 async def generate_answer_ticket(ticket: dict):
-    """Process a new ticket with ML models and store it"""
+    """Generates template/answer for a certain ticket and stores it"""
     try:
+        context = s3.get_context()
+        ticket['status'] = 'inProgress'
+        Ticket.create_or_update_from_json(ticket)
         if ticket.get('strategy') == 'template':
-            template = models.query_mistral_template(ticket)
-            return template
+            answer, code = models.query_mistral(ticket, context, 'template')
+            Answer.create_answer(ticket['id'], answer)
         else:
-            auto_answer = models.query_mistral_template(ticket)
-            # Auto-Answer to sent channel logic here
+            answer, code = models.query_mistral(ticket, context, 'autoAnswer')
+            Answer.create_answer(ticket['id'], answer)
+            print(f"Answer for ticket: {ticket[id]}: {answer}")
+
+        return {"message": "Ticket answer/template generated successfully."}
+            
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/answer_ticket")
+async def get_answer_ticket(ticket_id: int):
+    try:
+        return Answer.get_answer(ticket_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))    
 
 def process_ticket(ticket_json: Dict) -> Dict:
     """Process ticket with ML models and return enriched ticket data"""
