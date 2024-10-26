@@ -1,11 +1,10 @@
-"use client";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { mockTickets } from "@/mocks";
 import type { Ticket } from "@/types";
 import TicketCard from "../Ticket";
 import { useRules } from "@/context/RulesContext";
+import { generateAnswer } from "@/services/generateAnswer";
 
 interface SortConfig {
   key: keyof Ticket | null;
@@ -28,7 +27,11 @@ const headers: TableHeader[] = [
   { label: "Strategy", sortKey: null },
 ];
 
-export default function Table() {
+type Props = {
+  activeView: "tickets" | "answered";
+};
+
+export default function Table({ activeView }: Props) {
   const { rules } = useRules();
   const [sortConfig, setSortConfig] = useState<SortConfig>({
     key: null,
@@ -52,7 +55,7 @@ export default function Table() {
     return 0;
   });
 
-  const handleSort = (key: keyof Ticket) => {
+  function handleSort(key: keyof Ticket) {
     setSortConfig((prevConfig) => ({
       key,
       direction:
@@ -60,7 +63,27 @@ export default function Table() {
           ? "desc"
           : "asc",
     }));
-  };
+  }
+
+  const templateStratTickets = sortedTickets.filter(
+    (ticket) => ticket.strategy === "template"
+  );
+  const autoAnswerStratTickets = sortedTickets.filter(
+    (ticket) => ticket.strategy === "autoAnswer"
+  );
+
+  useEffect(() => {
+    async function generateAnswersForAutoAnswerTickets() {
+      try {
+        await Promise.all(
+          autoAnswerStratTickets.map((ticket) => generateAnswer(ticket))
+        );
+      } catch (error) {
+        console.error("Error in generating answers for tickets:", error);
+      }
+    }
+    generateAnswersForAutoAnswerTickets();
+  }, []);
 
   return (
     <div className="overflow-x-auto">
@@ -96,9 +119,13 @@ export default function Table() {
           </tr>
         </thead>
         <tbody className="bg-foreground text-text text-sm font-light">
-          {sortedTickets.map((ticket) => (
-            <TicketCard key={ticket.id} ticket={ticket} />
-          ))}
+          {activeView === "tickets"
+            ? templateStratTickets.map((ticket) => (
+                <TicketCard key={ticket.id} ticket={ticket} />
+              ))
+            : autoAnswerStratTickets.map((ticket) => (
+                <TicketCard key={ticket.id} ticket={ticket} />
+              ))}
         </tbody>
       </table>
     </div>

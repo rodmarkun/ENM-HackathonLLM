@@ -5,10 +5,17 @@ type Props = {
   children: ReactNode;
   onClick: () => void;
   size: "icon" | "none" | "md";
-  color: "accent" | "none";
+  color: "accent" | "muted" | "none";
+  className?: string;
 };
 
-export const Button = ({ children, onClick, size, color }: Props) => {
+export const Button = ({
+  children,
+  onClick,
+  size,
+  color,
+  className,
+}: Props) => {
   const classes = {
     common: "rounded-md font-bold hover:opacity-70 transition duration-300",
     sizes: {
@@ -18,6 +25,7 @@ export const Button = ({ children, onClick, size, color }: Props) => {
     },
     colors: {
       accent: "bg-accent",
+      muted: "bg-muted",
       none: "",
     },
   };
@@ -25,7 +33,12 @@ export const Button = ({ children, onClick, size, color }: Props) => {
   return (
     <button
       onClick={onClick}
-      className={cn(classes.common, classes.sizes[size], classes.colors[color])}
+      className={cn(
+        classes.common,
+        classes.sizes[size],
+        classes.colors[color],
+        className
+      )}
     >
       {children}
     </button>
