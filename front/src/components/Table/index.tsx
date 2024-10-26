@@ -25,6 +25,7 @@ const headers: TableHeader[] = [
   { label: "Status", sortKey: null },
   { label: "Sentiment", sortKey: "sentiment" },
   { label: "Created At", sortKey: "created_at" },
+  { label: "Strategy", sortKey: null },
 ];
 
 export default function Table() {
@@ -69,10 +70,27 @@ export default function Table() {
             {headers.map((header) => (
               <th
                 key={header.label}
-                className="py-3 px-6 text-left cursor-pointer"
+                className={cn(
+                  "py-3 px-6 text-left",
+                  header.sortKey && "cursor-pointer"
+                )}
                 onClick={() => header.sortKey && handleSort(header.sortKey)}
               >
-                {header.label}
+                <span className="flex items-center">
+                  {header.label}
+                  {header.sortKey && (
+                    <span
+                      className={cn(
+                        "ml-1 transition-transform duration-200",
+                        sortConfig.key === header.sortKey &&
+                          sortConfig.direction === "asc" &&
+                          "rotate-180"
+                      )}
+                    >
+                      {"\u25B2"}
+                    </span>
+                  )}
+                </span>
               </th>
             ))}
           </tr>

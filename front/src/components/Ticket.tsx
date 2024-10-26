@@ -41,6 +41,9 @@ export default function TicketCard({ ticket }: TicketProps) {
       <td className="py-3 px-6 text-left">
         {new Date(ticket.created_at).toLocaleString()}
       </td>
+      <td className="py-3 px-6 text-left font-medium">
+        {ticket.strategy.charAt(0).toUpperCase() + ticket.strategy.slice(1)}
+      </td>
     </tr>
   );
 }
