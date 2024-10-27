@@ -1,25 +1,22 @@
 import type { Metadata } from "next";
-import { Merriweather } from "next/font/google";
+import { Inter } from 'next/font/google'
 import "./globals.css";
-
-const font = Merriweather({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Nerdevs Customer Support",
   description: "An AI automatized site to help companies with client's tickets",
 };
 
+const inter = Inter({ subsets: ['latin'] })
+
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
-      <body className={`${font.className} antialiased`}>{children}</body>
+      <body className={inter.className}>{children}</body>
     </html>
-  );
+  )
 }

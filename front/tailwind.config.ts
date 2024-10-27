@@ -14,7 +14,10 @@ const config: Config = {
         foreground: "#1F2937", // Fondos de tarjetas/componentes
         text: "#F9FAFB", // Texto principal
         muted: "#9CA3AF", // Texto secundario
-        accent: "#3B82F6", // Color de acento (azul)
+        accent: "#80B8EB", // Color de acento (azul)
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'], // Fuente principal
       },
     },
   },

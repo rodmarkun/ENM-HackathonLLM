@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useRules, Rule, Property } from "../context/RulesContext";
 import { useRef, useState } from "react";
 import { Button } from "./ui/Button";
@@ -62,18 +63,18 @@ export default function Topbar({ activeView, onViewChange }: Props) {
         </Button>
       </div>
       <div className="flex gap-2">
-        <p className="text-sm w-[400px]">
-          Upload a document with your company's information or guidelines to
-          help improve the accuracy of responses {"\u2192"}
-        </p>
-
-        <Button
-          onClick={() => fileInputRef.current?.click()}
-          size="md"
-          color="accent"
-        >
-          Upload Context
-        </Button>
+        <div className="relative group inline-block">
+          <Button
+            onClick={() => fileInputRef.current?.click()}
+            size="md"
+            color="accent"
+          >
+            Upload Context
+          </Button>
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute -top-16 left-1/2 -translate-x-1/2 px-3 py-2 bg-black/80 text-white rounded text-xs w-[400px] text-center z-50 pointer-events-none">
+            Upload a document with your company's information or guidelines to help improve the accuracy of responses
+          </span>
+        </div>
         {/* Hidden file input */}
         <input
           type="file"
@@ -87,14 +88,18 @@ export default function Topbar({ activeView, onViewChange }: Props) {
             sendContextFile(file);
           }}
         />
-        <Button
-          onClick={() => setIsConfigModalOpen(true)}
-          size="md"
-          color="accent"
-        >
-          Config
-        </Button>
-
+        <div className="relative group inline-block">
+          <Button
+            onClick={() => setIsConfigModalOpen(true)}
+            size="md"
+            color="accent"
+          >
+            Config
+          </Button>
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute -top-16 left-1/2 -translate-x-1/2 px-3 py-2 bg-black/80 text-white rounded text-xs w-[190px] text-center z-50 pointer-events-none">
+          Set your strategy config
+          </span>
+        </div> 
         {isConfigModalOpen && (
           <Modal onClose={() => setIsConfigModalOpen(false)} className="border">
             <div className="p-6">
