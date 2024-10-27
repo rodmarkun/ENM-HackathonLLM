@@ -2,6 +2,10 @@
 
 Project designed for [LLMHackathon by CodeGPT, GuruSup and Mistral](https://llmhackathon.dev/). Project is made from scratch and without templates in NextJS (frontend) and Python (backend). The project automatically processes customer support tickets aided by LLMs and inside logic. The pipeline can be described as follows:
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9fc87ce7-cfff-4723-b335-a2bcb45a3c7a" width="1100" height="auto">
+</p>
+
 ## Pipeline
 
 When a ticket is created by a user, it is automatically processed by a series of models in order to classify it with different labels:
@@ -25,6 +29,20 @@ In order to generate a direct answer or a template for the Ticket, the main LLM 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/08267c27-4c0b-44bb-af41-af427856eee3" width="950" height="auto">
 </p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/088fb43a-06a2-4e1f-9f9b-fd429edb9a8a" width="1100" height="auto">
+</p>
+
+## Usage of CodeGPT
+
+The usage of CodeGPT was one of the requirements in order to participate in this Hackathon. Our team used CodeGPT for the following use cases:
+
+- Improvement and iteration of prompts for Mistral AI
+![image](https://github.com/user-attachments/assets/b8f71cb6-80ac-4369-8ee4-77fac8d64e6a)
+- Code generation support using the VSCode extension
+![image](https://github.com/user-attachments/assets/1d8a4db5-12ed-41bf-84e1-ab13ebc2ea1d)
+
 
 ## Contact
 You might find us on x.com:
