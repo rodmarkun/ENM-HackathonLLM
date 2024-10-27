@@ -35,7 +35,7 @@ export default function Template() {
           const _ticket = await getIndividualTicket(ticketId);
           setTicket(_ticket);
 
-          if (_ticket.strategy === "template") {
+          if (_ticket.strategy === "template" && await getAnswerById(ticketId) === null) {
             console.log("GENERA PARA LOS TEMPLATE");
             await generateAnswer(_ticket);
           } else {

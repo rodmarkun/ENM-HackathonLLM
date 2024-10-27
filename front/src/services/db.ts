@@ -1,4 +1,4 @@
-import { Ticket } from "@/types";
+import { Ticket, Answer } from "@/types";
 
 export async function getAllTickets(): Promise<Ticket[]> {
   const res = await fetch("/api/database/get-all-tickets", {
@@ -27,7 +27,7 @@ export async function getIndividualTicket(ticketId: number): Promise<Ticket> {
   return response.json();
 }
 
-export async function getAnswerById(ticketId: number) {
+export async function getAnswerById(ticketId: number): Promise<Answer> {
   const response = await fetch(`/api/database/get-answer/${ticketId}`, {
     headers: {
       "Content-Type": "application/json",

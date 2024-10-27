@@ -4,7 +4,7 @@ import type { SortConfig, Ticket } from "@/types";
 import TicketCard from "../TicketCard";
 import { useRules } from "@/context/RulesContext";
 import { generateAnswer } from "@/services/generateAnswer";
-import { getAllTickets } from "@/services/db";
+import { getAllTickets, getAnswerById } from "@/services/db";
 import { headers } from "@/consts";
 
 type Props = {
@@ -44,8 +44,18 @@ export default function Table({ activeView }: Props) {
 
           await Promise.all(
             initialAutoAnswerTickets.map(async (ticket) => {
-              await generateAnswer(ticket);
-              processedTicketIds.current.add(ticket.id);
+              try {
+                const existingAnswer = await getAnswerById(ticket.id);
+                if (!existingAnswer) {
+                  await generateAnswer(ticket);
+                  console.log(`Generated new answer for ticket ${ticket.id}`);
+                } else {
+                  console.log(`Answer already exists for ticket ${ticket.id}`);
+                }
+                processedTicketIds.current.add(ticket.id);
+              } catch (error) {
+                console.error(`Error processing ticket ${ticket.id}:`, error);
+              }
             })
           );
         }
