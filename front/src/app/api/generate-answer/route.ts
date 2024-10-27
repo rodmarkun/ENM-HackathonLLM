@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export async function POST(req: NextResponse) {
+export async function POST(req: NextRequest) {
   try {
     const { ticket } = await req.json();
 
@@ -11,6 +12,7 @@ export async function POST(req: NextResponse) {
       },
       body: JSON.stringify(ticket),
     });
+
     if (!backendResponse.ok) {
       const errorText = await backendResponse.text();
       return NextResponse.json(

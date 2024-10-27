@@ -1,19 +1,22 @@
 import { useState, useEffect } from "react";
 
-function TypingEffect({ text, speed = 150 }) {
+type Props = {
+  text: string;
+  speed: number;
+};
+
+function TypingEffect({ text, speed }: Props) {
   const [displayedText, setDisplayedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
-  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const handleTyping = () => {
       if (isDeleting) {
-        // deletion 
+        // deletion
         if (displayedText.length > 0) {
           setDisplayedText(text.slice(0, displayedText.length - 1));
         } else {
           setIsDeleting(false);
-          setIndex(0);
         }
       } else {
         // writing
@@ -28,8 +31,7 @@ function TypingEffect({ text, speed = 150 }) {
     const timer = setTimeout(handleTyping, speed);
     return () => clearTimeout(timer);
   }, [displayedText, isDeleting, text, speed]);
-  
-  console.log(index)
+
   return <span>{displayedText}</span>;
 }
 

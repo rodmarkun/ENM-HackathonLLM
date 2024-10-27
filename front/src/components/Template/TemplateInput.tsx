@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import type { Answer, Ticket } from "@/types";
+import React, { useState } from "react";
+import type { Ticket } from "@/types";
 import { cn, getPriorityClasses, getStatusClasses } from "@/lib/utils";
 
 interface Props {

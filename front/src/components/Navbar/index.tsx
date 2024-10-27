@@ -8,7 +8,7 @@ export default function Navbar() {
     <div className="border-2 mt-2 mr-2 rounded-lg  w-full flex items-center justify-between py-4 md:py-4 px-4 sm:px-9">
       <div className="flex items-center font-bold text-accent text-lg md:text-xl">
         <Image src={"/icon.png"} alt="Icon" width={40} height={24} className="mr-2" /> 
-        <Link href="/"> NERDEVS: <TypingEffect text="ai customer support" /></Link>
+        <Link href="/"> NERDEVS: <TypingEffect text="ai customer support" speed={150} /></Link>
       </div>
     <div>      
       <Button onClick={() => {}} size="md" color="accent" className="flex items-center px-4 py-2 bg-accent rounded-full hover:bg-accent-600">
