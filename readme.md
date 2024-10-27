@@ -3,8 +3,9 @@
 Project designed for [LLMHackathon by CodeGPT, GuruSup and Mistral](https://llmhackathon.dev/). Project is made from scratch and without templates in NextJS (frontend) and Python (backend). The project automatically processes customer support tickets aided by LLMs and inside logic. The pipeline can be described as follows:
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/9fc87ce7-cfff-4723-b335-a2bcb45a3c7a" width="1100" height="auto">
+  <img src="https://github.com/user-attachments/assets/f412f3bc-8486-4c3e-8189-805c9cd9c2b2" width="1100" height="auto">
 </p>
+
 
 ## Pipeline
 
@@ -31,7 +32,7 @@ In order to generate a direct answer or a template for the Ticket, the main LLM 
 </p>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/088fb43a-06a2-4e1f-9f9b-fd429edb9a8a" width="1100" height="auto">
+  <img src="https://github.com/user-attachments/assets/97a1d9c1-1f8f-4dae-be25-e87282baaf8c" width="1100" height="auto">
 </p>
 
 ## Usage of CodeGPT
