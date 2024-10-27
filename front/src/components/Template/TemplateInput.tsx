@@ -11,7 +11,7 @@ interface Props {
   ticket: Ticket;
   answer: string;
   onClose: () => void;
-  onSendAnswer: (message: string) => void;
+  onSendAnswer: () => void;
 }
 
 export default function TemplateInput({
@@ -21,6 +21,15 @@ export default function TemplateInput({
   onSendAnswer,
 }: Props) {
   const [response, setResponse] = useState(answer);
+  const [isSending, setIsSending] = useState(false);
+
+  const handleSendAnswer = () => {
+    setIsSending(true);
+    alert("Answer sent");
+    setTimeout(() => {
+      onSendAnswer();
+    }, 500);
+  };
 
   return (
     <div className="flex h-full w-full rounded-t-md border-2 border-b-0 bg-foreground text-text shadow-lg">
@@ -104,8 +113,12 @@ export default function TemplateInput({
 
         <div className="flex flex-col gap-3 mt-auto">
           <button
-            className="w-full rounded-lg bg-accent py-2 px-4 font-medium text-text hover:bg-blue-600 transition-colors"
-            onClick={() => onSendAnswer(response)}
+            className={cn(
+              "w-full rounded-lg bg-accent py-2 px-4 font-medium text-text transition-all duration-500",
+              "hover:bg-blue-600",
+              isSending && "opacity-0 pointer-events-none"
+            )}
+            onClick={handleSendAnswer}
           >
             Send Answer
           </button>
