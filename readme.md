@@ -44,6 +44,38 @@ The usage of CodeGPT was one of the requirements in order to participate in this
 - Code generation support using the VSCode extension
 ![image](https://github.com/user-attachments/assets/1d8a4db5-12ed-41bf-84e1-ab13ebc2ea1d)
 
+## Installation Instructions
+
+### Backend
+
+In order to run the FastAPI for the backend, position yourself in the folder and install python dependencies: 
+
+``` bash
+cd backend
+pip install uvicorn boto3 fastapi requests peewee python-multipart sentence-transformers
+```
+
+Create the database (must have an empty folder named "data") with:
+```bash
+python database.py
+```
+(In case of error, run from the project's root folder)
+
+Run the API:
+```bash
+python main.py
+```
+
+## Frontend
+
+Position yourself in the folder, install dependencies and run with npm:
+
+```bash
+cd front
+npm install
+npm run build
+npm run start
+```
 
 ## Contact
 You might find us on x.com:
