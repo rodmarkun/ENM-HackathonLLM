@@ -16,7 +16,7 @@ export async function getAllTickets(): Promise<Ticket[]> {
   return tickets; // Return tickets as an array directly
 }
 
-export async function getIndividualTicket(ticketId: number) {
+export async function getIndividualTicket(ticketId: number): Promise<Ticket> {
   const response = await fetch(`/api/database/get-ticket/${ticketId}`, {
     headers: {
       "Content-Type": "application/json",
@@ -32,6 +32,7 @@ export async function getAnswerById(ticketId: number) {
     headers: {
       "Content-Type": "application/json",
     },
+    cache: "no-store",
   });
 
   return response.json();

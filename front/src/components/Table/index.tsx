@@ -21,15 +21,43 @@ export default function Table({ activeView }: Props) {
   const [tickets, setTickets] = useState<Ticket[]>([]);
 
   // Keep track of previously processed ticket IDs
-  const processedTicketIds = useRef<Set<string>>(new Set());
+  const processedTicketIds = useRef<Set<number>>(new Set());
 
+  // Fetch tickets and process initial auto-answer tickets
   useEffect(() => {
-    async function fetchTickets() {
-      const _tickets = await getAllTickets();
-      setTickets(_tickets);
+    async function fetchAndProcessTickets() {
+      try {
+        const _tickets = await getAllTickets();
+        setTickets(_tickets);
+
+        // Process tickets that already have autoAnswer strategy
+        const initialAutoAnswerTickets = _tickets.filter(
+          (ticket) =>
+            ticket.strategy === "autoAnswer" &&
+            !processedTicketIds.current.has(ticket.id)
+        );
+
+        if (initialAutoAnswerTickets.length > 0) {
+          console.log(
+            `Processing ${initialAutoAnswerTickets.length} initial auto-answer tickets`
+          );
+
+          await Promise.all(
+            initialAutoAnswerTickets.map(async (ticket) => {
+              await generateAnswer(ticket);
+              processedTicketIds.current.add(ticket.id);
+            })
+          );
+        }
+      } catch (error) {
+        console.error(
+          "Error in fetching and processing initial tickets:",
+          error
+        );
+      }
     }
 
-    fetchTickets();
+    fetchAndProcessTickets();
   }, []);
 
   const updatedTickets = tickets.map((ticket) => {
@@ -59,6 +87,7 @@ export default function Table({ activeView }: Props) {
     }));
   }
 
+  // Filter tickets based on their strategy
   const templateStratTickets = sortedTickets.filter(
     (ticket) => ticket.strategy === "template"
   );
@@ -66,31 +95,43 @@ export default function Table({ activeView }: Props) {
     (ticket) => ticket.strategy === "autoAnswer"
   );
 
-  // Process new autoAnswer tickets whenever rules or tickets change
+  // Process new auto-answer tickets from rules changes
   useEffect(() => {
-    async function processNewAutoAnswerTickets() {
+    async function processRuleBasedAutoAnswerTickets() {
       try {
-        const newAutoAnswerTickets = autoAnswerStratTickets.filter(
-          (ticket) => !processedTicketIds.current.has(ticket.created_at)
-        );
+        // Only process tickets that got autoAnswer strategy from rules
+        const newAutoAnswerTickets = autoAnswerStratTickets.filter((ticket) => {
+          const hadAutoAnswerInitially =
+            tickets.find((t) => t.id === ticket.id)?.strategy === "autoAnswer";
+
+          return (
+            !hadAutoAnswerInitially &&
+            !processedTicketIds.current.has(ticket.id)
+          );
+        });
 
         if (newAutoAnswerTickets.length > 0) {
-          await Promise.all(
-            newAutoAnswerTickets.map((ticket) => generateAnswer(ticket))
+          console.log(
+            `Processing ${newAutoAnswerTickets.length} new rule-based auto-answer tickets`
           );
 
-          // Add newly processed tickets to the set
-          newAutoAnswerTickets.forEach((ticket) => {
-            processedTicketIds.current.add(ticket.created_at);
-          });
+          await Promise.all(
+            newAutoAnswerTickets.map(async (ticket) => {
+              await generateAnswer(ticket);
+              processedTicketIds.current.add(ticket.id);
+            })
+          );
         }
       } catch (error) {
-        console.error("Error in generating answers for tickets:", error);
+        console.error(
+          "Error in generating answers for rule-based tickets:",
+          error
+        );
       }
     }
 
-    processNewAutoAnswerTickets();
-  }, [rules]);
+    processRuleBasedAutoAnswerTickets();
+  }, [autoAnswerStratTickets, tickets, rules]);
 
   return (
     <div className="overflow-x-auto">
