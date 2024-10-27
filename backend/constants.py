@@ -6,7 +6,7 @@ import os
 ///////////////
 """
 # Required fields for creating a new Ticket
-TICKET_REQUIRED_FIELDS = ['name', 'email', 'subject', 'description', 'language', 'category', 'strategy'] 
+TICKET_REQUIRED_FIELDS = ['name', 'email', 'subject', 'description', 'language', 'category'] 
 
 DEFAULT_TICKET_STATUS = 'open'
 TICKET_STATUSES = ['open', 'inProgress', 'closed']

@@ -10,28 +10,32 @@ def create_tickets():
     # List of tickets
     tickets = [
         {
+            "id": 7,
+            "name": "Carlos Rodriguez",
+            "email": "carlos.r@example.com",
+            "subject": "No llego el enlace para restablecer contraseña",
+            "description": "Solicite restablecer mi contraseña hace 15 minutos pero aun no he recibido ningún correo. Ya revise la carpeta de spam."
+        },
+        {
+            "id": 8,
+            "name": "Maria Gonzalez",
+            "email": "maria.g@example.com",
+            "subject": "Correo de restablecimiento de contrasena no recibido",
+            "description": "Esperando el correo para restablecer mi contrasena. Han pasado 20 minutos y no aparece en mi bandeja de entrada."
+        },
+        {
             "id": 9,
-            "name": "John Doe",
-            "email": "john@example.com",
-            "subject": "Payment Issue",
-            "description": "I can't process my payment with my credit card. It keeps showing an error.",
-            "language": "en",
-            "category": "billing",
-            "sentiment": "negative",
-            "strategy": "autoAnswer",
-            "priority": "high"
+            "name": "Emma Davis",
+            "email": "emma.d@example.com",
+            "subject": "Payment Processing Failed",
+            "description": "Trying to make a payment but my credit card keeps getting declined with an error."
         },
         {
             "id": 10,
-            "name": "Jane Smith",
-            "email": "jane@example.com",
-            "subject": "Template Request",
-            "description": "Need help setting up my account. The verification email hasn't arrived.",
-            "language": "en",
-            "category": "technical",
-            "sentiment": "neutral",
-            "strategy": "template",
-            "priority": "mid"
+            "name": "Tom Anderson",
+            "email": "tom.a@example.com",
+            "subject": "Mobile App Crash Issue",
+            "description": "App crashes immediately when trying to upload my profile picture. Using latest version."
         }
     ]
     

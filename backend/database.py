@@ -3,7 +3,7 @@ import constants
 from datetime import datetime
 from typing import Dict, Optional
 
-db = peewee.SqliteDatabase("backend/data/hackathon.db")
+db = peewee.SqliteDatabase("data/hackathon.db")
 
 class BaseModel(peewee.Model):
     class Meta:
