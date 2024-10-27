@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { SortConfig, Ticket } from "@/types";
-import TicketCard from "../Ticket";
+import TicketCard from "../TicketCard";
 import { useRules } from "@/context/RulesContext";
 import { generateAnswer } from "@/services/generateAnswer";
 import { getAllTickets } from "@/services/db";
@@ -76,7 +76,7 @@ export default function Table({ activeView }: Props) {
 
         if (newAutoAnswerTickets.length > 0) {
           await Promise.all(
-            newAutoAnswerTickets.map((ticket) => generateAnswer(ticket)) 
+            newAutoAnswerTickets.map((ticket) => generateAnswer(ticket))
           );
 
           // Add newly processed tickets to the set

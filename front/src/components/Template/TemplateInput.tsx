@@ -1,85 +1,115 @@
-import React from "react";
-import type { Ticket } from "@/types";
-import { cn, getStatusClasses } from "@/lib/utils";
+import React, { useEffect, useState } from "react";
+import type { Answer, Ticket } from "@/types";
+import { cn, getPriorityClasses, getStatusClasses } from "@/lib/utils";
 
-interface TicketDetailProps {
+interface Props {
   ticket: Ticket;
+  answer: string;
   onClose: () => void;
+  onSendAnswer: (message: string) => void;
 }
 
-// Maps`status` y `priority`
-const statusClasses: { [key: string]: string } = {
-  open: "bg-green-300",
-  in_progress: "bg-yellow-300",
-  closed: "bg-gray-300",
-};
+export default function TemplateInput({
+  ticket,
+  answer,
+  onClose,
+  onSendAnswer,
+}: Props) {
+  const [response, setResponse] = useState(answer);
 
-const priorityClasses: { [key: string]: string } = {
-  low: "bg-yellow-300",
-  mid: "bg-orange-300",
-  high: "bg-red-300",
-};
-
-const TicketDetailView: React.FC<TicketDetailProps> = ({ ticket }) => {
   return (
-    <div className="w-full border-2 h-full mb-4 mt-4 bg-foreground rounded-lg shadow-lg">
-      <div className="p-6">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
+    <div className="flex h-full w-full rounded-t-md border-2 border-b-0 bg-foreground text-text shadow-lg">
+      <div className="flex flex-1 flex-col gap-6 p-8">
+        <div className="flex items-start justify-between">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
               <span
                 className={cn(
-                  "px-2 py-1 text-xs rounded-full font-semibold text-brown",
+                  "rounded-full px-2 py-1 text-xs font-semibold",
                   getStatusClasses(ticket.status)
                 )}
               >
-                {ticket?.status}
+                {ticket.status}
               </span>
               <span
-                className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                  priorityClasses[ticket.priority] || "bg-gray-300"
-                }`}
+                className={cn(
+                  "rounded-full px-2 py-1 text-xs font-semibold",
+                  getPriorityClasses(ticket.priority)
+                )}
               >
-                {ticket?.priority} priority
+                {ticket.priority} priority
               </span>
-              <span className="text-sm text">
-                {new Date(ticket?.created_at).toLocaleDateString()}
+              <span className="text-sm text-muted">
+                {new Date(ticket.created_at).toLocaleDateString()}
               </span>
             </div>
-            <h2 className="text-xl font-semibold">{ticket?.subject}</h2>
+            <h2 className="text-xl font-semibold">{ticket.subject}</h2>
+            <p className="text-sm text-muted">
+              From: {ticket.name} ({ticket.email})
+            </p>
           </div>
         </div>
-        {/* Content */}
-        <div className="space-y-4">
-          <div className="border-b pb-2">
-            <p className="text-sm pb-2 text">
-              From: {ticket?.name} ({ticket?.email})
-            </p>
-          </div>
-          <div className="whitespace-pre-wrap text">{ticket.subject}</div>
 
-          <div className="border-b pb-2"></div>
-          <div className="whitespace-pre-wrap text">
-            <p>
-              En una pequeña ciudad costera, rodeada por montañas verdes y
-              bañada por el sol del mar, los habitantes vivían una vida
-              tranquila y sencilla. La ciudad, conocida por sus calles
-              empedradas y casas de colores, había sido hogar de generaciones de
-              familias que llevaban consigo historias de tiempos remotos,
-              leyendas sobre tesoros escondidos en las montañas y secretos
-              transmitidos en susurros de generación en generación. Entre los
-              habitantes se encontraba un anciano pescador llamado Manuel,
-              conocido por todos como el "guardián del puerto". Manuel, con su
-              sombrero de paja y su piel curtida por el sol, pasaba los días
-              arreglando redes, enseñando a los más jóvenes a navegar y contando
-              historias sobre criaturas marinas y misterios del océano."
-            </p>
+        <div className="flex flex-col gap-4 border-t border-muted pt-4">
+          <h3 className="text-lg font-semibold">Ticket Description</h3>
+          <p className="whitespace-pre-wrap text-sm">{ticket.description}</p>
+        </div>
+
+        <div className="flex flex-col gap-4 border-t border-muted pt-4">
+          <h3 className="text-lg font-semibold">Template Edit</h3>
+        </div>
+
+        <div className="flex flex-col gap-4 border-t border-muted pt-4">
+          <textarea
+            className="w-full rounded-lg border border-muted bg-background p-4 text-text"
+            placeholder="Write your response here..."
+            value={response}
+            onChange={(e) => setResponse(e.target.value)}
+            rows={6}
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col w-1/4 gap-6 rounded-tr-md border-l border-muted bg-background p-6">
+        <div className="flex flex-col items-center gap-3">
+          <h3 className="text-sm font-semibold">Sentiment Display</h3>
+          <div className="flex items-center gap-3">
+            <div
+              className={cn(
+                "h-6 w-6 rounded-full",
+                ticket.sentiment === "positive" ? "bg-green-500" : "bg-muted"
+              )}
+            />
+            <div
+              className={cn(
+                "h-6 w-6 rounded-full",
+                ticket.sentiment === "neutral" ? "bg-yellow-500" : "bg-muted"
+              )}
+            />
+            <div
+              className={cn(
+                "h-6 w-6 rounded-full",
+                ticket.sentiment === "negative" ? "bg-red-500" : "bg-muted"
+              )}
+            />
           </div>
+        </div>
+
+        <div className="flex flex-col gap-3 mt-auto">
+          <button
+            className="w-full rounded-lg bg-accent py-2 px-4 font-medium text-text hover:bg-blue-600 transition-colors"
+            onClick={() => onSendAnswer(response)}
+          >
+            Send Answer
+          </button>
+          <button
+            className="w-full rounded-lg bg-red-500 py-2 px-4 font-medium text-text hover:bg-red-600 transition-colors"
+            onClick={onClose}
+          >
+            Close Ticket
+          </button>
         </div>
       </div>
     </div>
   );
-};
-
-export default TicketDetailView;
+}

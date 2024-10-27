@@ -14,6 +14,14 @@ export type Ticket = {
   priority: "low" | "mid" | "high";
 };
 
+export type Answer = {
+  id: number;
+  ticket_id: number;
+  created_at: string;
+  updated_at: string;
+  answer: string;
+};
+
 export interface SortConfig {
   key: keyof Ticket | null;
   direction: "asc" | "desc";
@@ -23,4 +31,3 @@ export interface TableHeader {
   label: string;
   sortKey: keyof Ticket | null;
 }
-

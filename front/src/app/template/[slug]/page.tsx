@@ -1,29 +1,57 @@
-"use client"
+"use client";
 
 import Navbar from "@/components/Navbar";
 import TemplateInput from "@/components/Template/TemplateInput";
-import { mockTickets } from "@/mocks";
-import { revalidatePath } from "next/cache";
+import { getAnswerById, getIndividualTicket } from "@/services/db";
+import { Answer, Ticket } from "@/types";
+import { notFound, usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
-type Props = {
-  params: {
-    slug: number;
-  };
-};
+export default function Template() {
+  const [ticket, setTicket] = useState<Ticket | null>(null);
+  const [answerTicket, setAnswerTicket] = useState<Answer>();
+  const pathname = usePathname();
+  const ticketId = parseInt(pathname.replace("/template/", ""));
 
-export default function Template({ params }: Props) {
-  const idx = params.slug;
-  const ticket = mockTickets[idx - 1];
+  useEffect(() => {
+    if (!ticketId) {
+      notFound();
+    }
 
-  // Define a placeholder onClose function
+    const fetchTicket = async () => {
+      try {
+        const fetchedTicket = await getIndividualTicket(ticketId);
+        setTicket(fetchedTicket);
+        const fetchedAnswer = await getAnswerById(ticketId);
+        setAnswerTicket(fetchedAnswer);
+        console.log("Fetched ticket:", fetchedAnswer.answer);
+      } catch (error) {
+        console.error("Failed to fetch ticket:", error);
+        notFound();
+      }
+    };
+
+    fetchTicket();
+  }, [ticketId]);
+
   const handleClose = () => {
     console.log("Close button clicked");
   };
 
+  // Loading state
+  if (!ticket || !answerTicket) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div className="h-screen flex flex-col gap-4 px-4 pt-2">
+    <div className="h-screen flex flex-col gap-8 px-4 pt-2">
       <Navbar />
-      <TemplateInput ticket={ticket} onClose={handleClose} />
+      <TemplateInput
+        ticket={ticket}
+        onClose={handleClose}
+        answer={answerTicket.answer}
+        onSendAnswer={() => {}}
+      />
     </div>
   );
 }

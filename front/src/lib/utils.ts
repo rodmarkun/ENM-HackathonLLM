@@ -34,3 +34,18 @@ export function getPriorityClasses(priority: "low" | "mid" | "high") {
       return "";
   }
 }
+
+export function getSentimentClasses(
+  sentiment: "positive" | "neutral" | "negative"
+) {
+  switch (sentiment) {
+    case "positive":
+      return "bg-green-200 text-green-800";
+    case "neutral":
+      return "bg-yellow-200 text-yellow-800";
+    case "negative":
+      return "bg-red-200 text-red-800";
+    default:
+      return "";
+  }
+}
