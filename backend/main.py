@@ -116,7 +116,7 @@ async def generate_answer_ticket(ticket: dict):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@app.get("/answer_ticket")
+@app.get("/answer_ticket/{ticket_id}")
 async def get_answer_ticket(ticket_id: int):
     try:
         return Answer.get_answer(ticket_id)
