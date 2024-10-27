@@ -49,3 +49,17 @@ export function getSentimentClasses(
       return "";
   }
 }
+
+export function getLanguageEmoji(language: string): string {
+  const languageCode = language.split("_")[0];
+
+  const emojiMap: { [key: string]: string } = {
+    eng: "🇬🇧",
+    spa: "🇪🇸",
+    ita: "🇮🇹",
+    fra: "🇫🇷",
+    deu: "🇩🇪",
+  };
+
+  return emojiMap[languageCode] || "🌐";
+}

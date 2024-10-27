@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     }
 
     const data = await backendResponse.json();
-    return NextResponse.json(data); // Expecting the backend response to have { url } or similar
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json(

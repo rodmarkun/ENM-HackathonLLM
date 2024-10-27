@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import type { Ticket } from "@/types";
-import { cn, getPriorityClasses, getStatusClasses } from "@/lib/utils";
+import {
+  cn,
+  getPriorityClasses,
+  getStatusClasses,
+  getLanguageEmoji,
+} from "@/lib/utils";
 
 interface Props {
   ticket: Ticket;
@@ -51,7 +56,9 @@ export default function TemplateInput({
         </div>
 
         <div className="flex flex-col gap-4 border-t border-muted pt-4">
-          <h3 className="text-lg font-semibold">Ticket Description</h3>
+          <h3 className="text-lg font-semibold">
+            Ticket Description {getLanguageEmoji(ticket.language)}
+          </h3>
           <p className="whitespace-pre-wrap text-sm">{ticket.description}</p>
         </div>
 
@@ -61,7 +68,7 @@ export default function TemplateInput({
 
         <div className="flex flex-col gap-4 border-t border-muted pt-4">
           <textarea
-            className="w-full rounded-lg border border-muted bg-background p-4 text-text"
+            className="w-full h-96 rounded-lg border border-muted bg-background p-4 text-text"
             placeholder="Write your response here..."
             value={response}
             onChange={(e) => setResponse(e.target.value)}

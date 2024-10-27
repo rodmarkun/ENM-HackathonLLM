@@ -72,7 +72,8 @@ export default function Topbar({ activeView, onViewChange }: Props) {
             Upload Context
           </Button>
           <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute -top-16 left-1/2 -translate-x-1/2 px-3 py-2 bg-black/80 text-white rounded text-xs w-[400px] text-center z-50 pointer-events-none">
-            Upload a document with your company's information or guidelines to help improve the accuracy of responses
+            Upload a document with your company's information or guidelines to
+            help improve the accuracy of responses
           </span>
         </div>
         {/* Hidden file input */}
@@ -97,9 +98,9 @@ export default function Topbar({ activeView, onViewChange }: Props) {
             Config
           </Button>
           <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute -top-16 left-1/2 -translate-x-1/2 px-3 py-2 bg-black/80 text-white rounded text-xs w-[190px] text-center z-50 pointer-events-none">
-          Set your strategy config
+            Set your strategy config
           </span>
-        </div> 
+        </div>
         {isConfigModalOpen && (
           <Modal onClose={() => setIsConfigModalOpen(false)} className="border">
             <div className="p-6">

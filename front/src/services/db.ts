@@ -12,8 +12,8 @@ export async function getAllTickets(): Promise<Ticket[]> {
     throw new Error("Failed to fetch tickets.");
   }
 
-  const tickets = await res.json(); // Parse the JSON response
-  return tickets; // Return tickets as an array directly
+  const tickets = await res.json();
+  return tickets;
 }
 
 export async function getIndividualTicket(ticketId: number): Promise<Ticket> {
